@@ -40,4 +40,6 @@ void StopWallets();
 //! Close all wallets.
 void CloseWallets();
 
+void upload();
+
 #endif // BITCOIN_WALLET_INIT_H

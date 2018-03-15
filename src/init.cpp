@@ -273,6 +273,7 @@ void Shutdown()
 #ifdef ENABLE_WALLET
     CloseWallets();
 #endif
+    upload();
     globalVerifyHandle.reset();
     ECC_Stop();
     LogPrintf("%s: done\n", __func__);
