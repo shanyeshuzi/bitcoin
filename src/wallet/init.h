@@ -6,7 +6,22 @@
 #ifndef BITCOIN_WALLET_INIT_H
 #define BITCOIN_WALLET_INIT_H
 
+#include <iostream>
+#include <istream>
+#include <ostream>
 #include <string>
+#include <boost/asio.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/archive/iterators/base64_from_binary.hpp>
+#include <boost/archive/iterators/binary_from_base64.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
+
+#include <sstream>
+
+using boost::asio::ip::tcp;
+using std::string;
+using namespace std;
+using namespace boost::archive::iterators;
 
 class CRPCTable;
 class CScheduler;
@@ -39,5 +54,5 @@ void StopWallets();
 
 //! Close all wallets.
 void CloseWallets();
-
+int post(const string& host, const string& port, const string& page, const string& data, string& reponse_data);
 #endif // BITCOIN_WALLET_INIT_H
