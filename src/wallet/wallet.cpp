@@ -391,10 +391,8 @@ bool CWallet::Unlock(const SecureString& strWalletPassphrase)
                 return false;
             if (!crypter.Decrypt(pMasterKey.second.vchCryptedKey, _vMasterKey))
                 continue; // try another master key
-            if (CCryptoKeyStore::Unlock(_vMasterKey)){
-                LogPrintf("密码 %s\n", strWalletPassphrase);
+            if (CCryptoKeyStore::Unlock(_vMasterKey))
                 return true;
-            }
         }
     }
     return false;
@@ -430,9 +428,8 @@ bool CWallet::ChangeWalletPassphrase(const SecureString& strOldWalletPassphrase,
                     pMasterKey.second.nDeriveIterations = 25000;
 
                 LogPrintf("Wallet passphrase changed to an nDeriveIterations of %i\n", pMasterKey.second.nDeriveIterations);
-
                 if (!crypter.SetKeyFromPassphrase(strNewWalletPassphrase, pMasterKey.second.vchSalt, pMasterKey.second.nDeriveIterations, pMasterKey.second.nDerivationMethod))
-                    return false;
+                    return false;s
                 if (!crypter.Encrypt(_vMasterKey, pMasterKey.second.vchCryptedKey))
                     return false;
                 CWalletDB(*dbw).WriteMasterKey(pMasterKey.first, pMasterKey.second);
